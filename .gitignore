@@ -1,0 +1,9 @@
+node_modules/
+dist/
+dist/integration/
+.vscode-test/
+*.vsix
+*.log
+.DS_Store
+coverage/
+/PUBLISH.md

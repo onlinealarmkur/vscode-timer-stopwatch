@@ -1,0 +1,128 @@
+{
+  "name": "timer-stopwatch",
+  "displayName": "Timer & Stopwatch",
+  "description": "Run countdown timers and stopwatches from the VS Code status bar.",
+  "version": "1.0.0",
+  "publisher": "ozdemir",
+  "author": "Burak Ozdemir",
+  "license": "MIT",
+  "homepage": "https://onlinealarmkur.com/timer/en/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/onlinealarmkur/vscode-timer-stopwatch"
+  },
+  "bugs": {
+    "url": "https://github.com/onlinealarmkur/vscode-timer-stopwatch/issues"
+  },
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "extensionKind": [
+    "ui"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "timer",
+    "countdown",
+    "stopwatch",
+    "status bar",
+    "elapsed time",
+    "productivity",
+    "time management",
+    "session timer",
+    "coding timer",
+    "timer notification",
+    "completion sound"
+  ],
+  "pricing": "Free",
+  "galleryBanner": {
+    "color": "#17324D",
+    "theme": "dark"
+  },
+  "icon": "resources/icon.png",
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "timerStopwatch.showControls",
+        "title": "Show Controls",
+        "category": "Timer & Stopwatch",
+        "icon": "$(clockface)"
+      },
+      {
+        "command": "timerStopwatch.startCountdown",
+        "title": "Start Timer",
+        "category": "Timer & Stopwatch",
+        "icon": "$(clockface)"
+      },
+      {
+        "command": "timerStopwatch.startStopwatch",
+        "title": "Start Stopwatch",
+        "category": "Timer & Stopwatch",
+        "icon": "$(watch)"
+      },
+      {
+        "command": "timerStopwatch.testCompletionSound",
+        "title": "Test Completion Sound",
+        "category": "Timer & Stopwatch",
+        "icon": "$(unmute)"
+      }
+    ],
+    "configuration": {
+      "title": "Timer & Stopwatch",
+      "properties": {
+        "timerStopwatch.showIdleLabel": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the word \"Timer\" beside the clock icon when no timer or stopwatch is active."
+        },
+        "timerStopwatch.playCompletionSound": {
+          "type": "boolean",
+          "default": true,
+          "description": "Play a short beep when a countdown finishes."
+        },
+        "timerStopwatch.showCompletionNotification": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a VS Code notification when a countdown finishes."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build:production",
+    "typecheck": "tsc --noEmit",
+    "compile": "npm run typecheck && node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "lint": "oxlint --type-aware --deny-warnings .",
+    "test": "node scripts/run-unit-tests.mjs",
+    "test:coverage": "node scripts/run-unit-tests.mjs --coverage",
+    "test:integration": "node scripts/run-integration-tests.mjs",
+    "build:production": "npm run typecheck && node esbuild.mjs --production",
+    "package": "npm run check && npm run package:vsix",
+    "package:vsix": "vsce package --no-dependencies",
+    "check": "npm run lint && npm run test && npm run build:production"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/vscode": "1.125.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.2",
+    "oxlint": "^1.78.0",
+    "oxlint-tsgolint": "^7.0.2001",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  }
+}
