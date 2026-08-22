@@ -52,10 +52,12 @@ describe('status bar formatting', () => {
     assert.deepEqual(formatStatusBar(undefined, 0), {
       text: '$(clockface) Timer',
       tooltip: 'Timer & Stopwatch. Select to start.',
+      accessibilityLabel: 'Timer and Stopwatch, ready.',
     });
     assert.deepEqual(formatStatusBar(undefined, 0, false), {
       text: '$(clockface)',
       tooltip: 'Timer & Stopwatch. Select to start.',
+      accessibilityLabel: 'Timer and Stopwatch, ready.',
     });
   });
 
@@ -63,6 +65,25 @@ describe('status bar formatting', () => {
     const presentation = formatStatusBar(countdown(), 5_000);
     assert.equal(presentation.text, '$(clockface) 5:00');
     assert.equal(presentation.tooltip, 'Countdown. Select for controls.');
+    assert.equal(
+      presentation.accessibilityLabel,
+      'Countdown, 5 minutes remaining.',
+    );
+  });
+
+  it('keeps the accessible countdown synchronized with the visible second', () => {
+    const session = countdown({ durationMs: 600_000 });
+
+    assert.deepEqual(formatStatusBar(session, 1), {
+      text: '$(clockface) 10:00',
+      tooltip: 'Countdown. Select for controls.',
+      accessibilityLabel: 'Countdown, 10 minutes remaining.',
+    });
+    assert.deepEqual(formatStatusBar(session, 1_000), {
+      text: '$(clockface) 9:59',
+      tooltip: 'Countdown. Select for controls.',
+      accessibilityLabel: 'Countdown, 9 minutes, 59 seconds remaining.',
+    });
   });
 
   it('distinguishes paused and elapsed stopwatch time', () => {
@@ -77,6 +98,10 @@ describe('status bar formatting', () => {
     );
     assert.equal(presentation.text, '$(debug-pause) 1:05');
     assert.match(presentation.tooltip, /Stopwatch paused/);
+    assert.equal(
+      presentation.accessibilityLabel,
+      'Stopwatch paused, 1 minute, 5 seconds elapsed.',
+    );
   });
 
   it('distinguishes paused countdowns and running stopwatches', () => {
@@ -88,6 +113,7 @@ describe('status bar formatting', () => {
       {
         text: '$(debug-pause) 5:00',
         tooltip: 'Countdown paused. Select for controls.',
+        accessibilityLabel: 'Countdown paused, 5 minutes remaining.',
       },
     );
     assert.deepEqual(
@@ -103,6 +129,7 @@ describe('status bar formatting', () => {
       {
         text: '$(watch) 1:05',
         tooltip: 'Stopwatch. Select for controls.',
+        accessibilityLabel: 'Stopwatch, 1 minute, 5 seconds elapsed.',
       },
     );
   });

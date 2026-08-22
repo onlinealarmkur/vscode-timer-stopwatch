@@ -2,7 +2,7 @@
   "name": "timer-stopwatch",
   "displayName": "Timer & Stopwatch",
   "description": "Run countdown timers and stopwatches from the VS Code status bar.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "ozdemir",
   "author": "Burak Ozdemir",
   "license": "MIT",
@@ -28,13 +28,9 @@
     "countdown",
     "stopwatch",
     "status bar",
-    "elapsed time",
     "productivity",
     "time management",
-    "session timer",
-    "coding timer",
-    "timer notification",
-    "completion sound"
+    "notification"
   ],
   "pricing": "Free",
   "galleryBanner": {
@@ -120,7 +116,7 @@
     "@vscode/test-electron": "^3.1.0",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.2",
-    "oxlint": "^1.78.0",
+    "oxlint": "^1.79.0",
     "oxlint-tsgolint": "^7.0.2001",
     "tsx": "^4.23.12",
     "typescript": "^7.0.2"

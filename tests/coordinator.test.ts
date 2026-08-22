@@ -928,4 +928,72 @@ describe('session coordinator', () => {
     assert.equal(state.scheduler.control.running, false);
     assert.equal(state.scheduler.control.disposals, 1);
   });
+
+  it('waits for pending persistence before shutdown completes', async () => {
+    const state = harness();
+    const pending = deferred();
+    state.repository.nextSave = pending;
+    const starting = state.coordinator.startStopwatch();
+    await new Promise((resolve) => setImmediate(resolve));
+
+    let shutdownCompleted = false;
+    const shuttingDown = state.coordinator.shutdown().then(() => {
+      shutdownCompleted = true;
+    });
+    await new Promise((resolve) => setImmediate(resolve));
+
+    assert.equal(shutdownCompleted, false);
+    assert.equal(state.scheduler.control.disposals, 1);
+
+    pending.resolve();
+    assert.equal(await starting, 'disposed');
+    await shuttingDown;
+
+    assert.equal(shutdownCompleted, true);
+    assert.equal(state.coordinator.snapshot(), undefined);
+    assert.equal(state.events.changes, 0);
+    assert.deepEqual(state.events.errors, []);
+  });
+
+  it('waits for completion restoration queued during shutdown', async () => {
+    const current: ActiveSession = {
+      mode: 'countdown',
+      status: 'running',
+      startedAt: 1_000,
+      accumulatedMs: 0,
+      durationMs: 10_000,
+    };
+    const state = harness(current);
+    const pendingRestore = deferred();
+    let shutdownCompleted = false;
+    let shuttingDown: Promise<void> | undefined;
+    state.events.afterTick = () => {
+      state.repository.nextSave = pendingRestore;
+      shuttingDown = state.coordinator.shutdown().then(() => {
+        shutdownCompleted = true;
+      });
+    };
+
+    const ticking = state.coordinator.processTick(11_000);
+    await new Promise((resolve) => setImmediate(resolve));
+
+    assert.ok(shuttingDown !== undefined);
+    assert.equal(shutdownCompleted, false);
+    assert.deepEqual(state.repository.states, [
+      { version: 2, session: null },
+      { version: 2, session: current },
+    ]);
+
+    pendingRestore.resolve();
+    await ticking;
+    await shuttingDown;
+
+    assert.equal(shutdownCompleted, true);
+    assert.equal(state.coordinator.snapshot(), undefined);
+    assert.deepEqual(state.presenter.sessions, []);
+    assert.equal(state.events.changes, 1);
+    assert.deepEqual(state.events.ticks, [11_000]);
+    assert.deepEqual(state.events.errors, []);
+    assert.equal(state.scheduler.control.disposals, 1);
+  });
 });

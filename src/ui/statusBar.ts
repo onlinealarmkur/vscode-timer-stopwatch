@@ -24,6 +24,9 @@ export class TimerStopwatchStatusBar implements vscode.Disposable {
       render: (presentation) => {
         item.text = presentation.text;
         item.tooltip = presentation.tooltip;
+        item.accessibilityInformation = {
+          label: presentation.accessibilityLabel,
+        };
       },
       show: () => item.show(),
       dispose: () => item.dispose(),

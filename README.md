@@ -111,7 +111,7 @@ After installation, run **Timer & Stopwatch: Test Completion Sound** from the Co
 
 ## Privacy
 
-The extension does not use telemetry or analytics, require an account, show advertising, or inspect project files. It makes no network requests. VS Code stores the current session locally for that workspace. The stored data contains only the mode, whether the session is running or paused, the duration when one applies, and the timing values needed to restore it.
+The extension does not use telemetry or analytics, require an account, show advertising, or inspect project files. It makes no network requests. VS Code stores the current session locally for that workspace. The stored session data contains only the mode, whether the session is running or paused, the duration when one applies, and the timing values needed to restore it.
 
 ## License
 

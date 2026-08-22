@@ -125,6 +125,7 @@ describe('status bar binding', () => {
       {
         text: '$(clockface) Timer',
         tooltip: 'Timer & Stopwatch. Select to start.',
+        accessibilityLabel: 'Timer and Stopwatch, ready.',
       },
     ]);
     assert.equal(sink.shows, 1);
@@ -148,6 +149,7 @@ describe('status bar binding', () => {
     assert.deepEqual(sink.presentations.at(-1), {
       text: '$(clockface) 0:50',
       tooltip: 'Countdown. Select for controls.',
+      accessibilityLabel: 'Countdown, 50 seconds remaining.',
     });
   });
 
@@ -166,6 +168,7 @@ describe('status bar binding', () => {
     assert.deepEqual(sink.presentations.at(-1), {
       text: '$(watch) 1:05',
       tooltip: 'Stopwatch. Select for controls.',
+      accessibilityLabel: 'Stopwatch, 1 minute, 5 seconds elapsed.',
     });
   });
 
@@ -197,6 +200,23 @@ describe('status bar binding', () => {
     controller.ticks.fire(1_000);
 
     assert.equal(sink.presentations.length, 1);
+  });
+
+  it('does not rewrite the accessible name before the visible second changes', () => {
+    const controller = new FakeController(countdown());
+    const sink = new RecordingSink();
+    new StatusBarBinding(controller, sink, () => 1_000);
+
+    controller.ticks.fire(1_001);
+    assert.equal(sink.presentations.length, 1);
+
+    controller.ticks.fire(2_000);
+    assert.equal(sink.presentations.length, 2);
+    assert.deepEqual(sink.presentations.at(-1), {
+      text: '$(clockface) 0:59',
+      tooltip: 'Countdown. Select for controls.',
+      accessibilityLabel: 'Countdown, 59 seconds remaining.',
+    });
   });
 
   it('updates the idle label immediately without hiding active time', () => {

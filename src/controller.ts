@@ -30,6 +30,8 @@ export class TimerStopwatchController implements vscode.Disposable {
     this.onDidTick = tickEmitter.event;
   }
 
+  private disposed = false;
+
   public static async create(
     storage: vscode.Memento,
     completionSound: CompletionSound,
@@ -157,9 +159,18 @@ export class TimerStopwatchController implements vscode.Disposable {
   }
 
   public dispose(): void {
+    if (this.disposed) {
+      return;
+    }
+    this.disposed = true;
     this.coordinator.dispose();
     this.manualSoundTest.dispose();
     this.sessionChangeEmitter.dispose();
     this.tickEmitter.dispose();
+  }
+
+  public async shutdown(): Promise<void> {
+    this.dispose();
+    await this.coordinator.shutdown();
   }
 }

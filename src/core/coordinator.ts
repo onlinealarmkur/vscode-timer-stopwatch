@@ -360,4 +360,14 @@ export class SessionCoordinator {
     this.completionAbortController.abort();
     this.scheduler.dispose();
   }
+
+  public async shutdown(): Promise<void> {
+    this.dispose();
+    let pending: Promise<void>;
+    do {
+      pending = this.mutationQueue;
+      await pending;
+      await Promise.resolve();
+    } while (pending !== this.mutationQueue);
+  }
 }

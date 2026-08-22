@@ -58,13 +58,9 @@ describe('publish assets and manifest identity', () => {
       'countdown',
       'stopwatch',
       'status bar',
-      'elapsed time',
       'productivity',
       'time management',
-      'session timer',
-      'coding timer',
-      'timer notification',
-      'completion sound',
+      'notification',
     ]);
   });
 
@@ -133,5 +129,32 @@ describe('publish assets and manifest identity', () => {
       socialPreview.byteLength < 1_000_000,
       'GitHub social previews must be smaller than 1 MB.',
     );
+  });
+
+  it('keeps both Marketplace screenshots valid, referenced, and out of the VSIX', async () => {
+    const readme = (await readRepositoryFile('README.md')).toString('utf8');
+    const vscodeIgnore = (
+      await readRepositoryFile('.vscodeignore')
+    ).toString('utf8');
+    const screenshots = [
+      'resources/marketplace-countdown.png',
+      'resources/marketplace-stopwatch.png',
+    ];
+
+    for (const screenshot of screenshots) {
+      assert.ok(
+        readme.includes(`](${screenshot})`),
+        `README must reference ${screenshot}.`,
+      );
+      assert.deepEqual(
+        readPngDimensions(await readRepositoryFile(screenshot)),
+        [1440, 900],
+      );
+      assert.equal(
+        vscodeIgnore.includes(`!${screenshot}`),
+        false,
+        `${screenshot} must remain excluded from the VSIX.`,
+      );
+    }
   });
 });

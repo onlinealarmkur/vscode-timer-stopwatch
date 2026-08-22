@@ -60,7 +60,9 @@ export class StatusBarBinding implements StatusBarDisposable {
     );
     if (
       this.lastPresentation?.text === presentation.text &&
-      this.lastPresentation.tooltip === presentation.tooltip
+      this.lastPresentation.tooltip === presentation.tooltip &&
+      this.lastPresentation.accessibilityLabel ===
+        presentation.accessibilityLabel
     ) {
       return;
     }

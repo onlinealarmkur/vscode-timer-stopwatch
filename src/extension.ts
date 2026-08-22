@@ -8,6 +8,8 @@ import {
 } from './ui/input.js';
 import { TimerStopwatchStatusBar } from './ui/statusBar.js';
 
+let activeController: TimerStopwatchController | undefined;
+
 export async function activate(
   context: vscode.ExtensionContext,
 ): Promise<TimerStopwatchController | undefined> {
@@ -18,6 +20,7 @@ export async function activate(
     context.workspaceState,
     completionSound,
   );
+  activeController = controller;
   const statusBar = new TimerStopwatchStatusBar(controller);
 
   context.subscriptions.push(
@@ -44,4 +47,10 @@ export async function activate(
   return context.extensionMode === vscode.ExtensionMode.Test
     ? controller
     : undefined;
+}
+
+export async function deactivate(): Promise<void> {
+  const controller = activeController;
+  activeController = undefined;
+  await controller?.shutdown();
 }
