@@ -1,6 +1,5 @@
 node_modules/
 dist/
-dist/integration/
 .vscode-test/
 *.vsix
 *.log

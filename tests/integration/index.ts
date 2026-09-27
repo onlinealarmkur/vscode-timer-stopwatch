@@ -122,7 +122,7 @@ export async function run(): Promise<void> {
   assert.ok(isRecord(manifest.engines), 'Manifest engines were missing.');
   assert.equal(
     manifest.engines.vscode,
-    '^1.125.0',
+    '^1.138.0',
     'The supported VS Code floor changed unexpectedly.',
   );
 
