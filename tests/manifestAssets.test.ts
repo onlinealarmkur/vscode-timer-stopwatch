@@ -64,13 +64,18 @@ describe('publish assets and manifest identity', () => {
     ]);
   });
 
-  it('keeps website promotion out of the README', async () => {
+  it('credits Online Alarm Kur once without other website promotion', async () => {
     const readme = (await readRepositoryFile('README.md')).toString('utf8');
     const manifest = JSON.parse(
       await readRepositoryFile('package.json').then((value) =>
         value.toString('utf8'),
       ),
     ) as unknown;
+    const [readmeBody = '', trademarkNotice] = readme.split(
+      '\n## Trademarks and brand assets\n\n',
+    );
+    const credit =
+      '\n## License\n\nThe source code uses the [MIT License](LICENSE). Created by [Online Alarm Kur](https://onlinealarmkur.com/en/), which offers an online alarm clock, timer, stopwatch, countdown, and more.\n';
 
     assert.ok(isRecord(manifest));
     assert.match(readme, /^# Timer & Stopwatch for VS Code$/mu);
@@ -78,7 +83,19 @@ describe('publish assets and manifest identity', () => {
       readme,
       /Run countdowns and track elapsed time without leaving VS Code\. The remaining or elapsed time stays visible in the status bar while you work, and VS Code saves the session locally\./u,
     );
-    assert.doesNotMatch(readme, /Online Timer|Online Alarm Kur|onlinealarmkur\.com/u);
+    assert.ok(
+      readmeBody.includes(credit),
+      'The README must credit Online Alarm Kur in its License section.',
+    );
+    assert.doesNotMatch(
+      readmeBody.replace(credit, ''),
+      /Online Timer|Online Alarm Kur|onlinealarmkur\.com/u,
+    );
+    assert.equal(
+      trademarkNotice,
+      'The MIT License applies to the source code only. The Online Alarm Kur name, logos, icons, and other brand assets are not covered by it and remain reserved. The Online Alarm Kur name, logo, and icon artwork are reserved brand assets and are not licensed for use with another product or service. The extension includes its icon so VS Code can display it.\n',
+      'The README must end with the trademark and brand assets notice.',
+    );
     assert.equal(manifest.homepage, 'https://onlinealarmkur.com/timer/en/');
   });
 

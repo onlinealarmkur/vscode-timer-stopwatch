@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import * as vscode from 'vscode';
+import { testCompletionLifecycle } from './completionLifecycle.js';
 
 const EXTENSION_ID = 'ozdemir.timer-stopwatch';
 
@@ -163,4 +164,5 @@ export async function run(): Promise<void> {
 
   await controller.stop();
   assert.equal(controller.session(), undefined);
+  await testCompletionLifecycle();
 }

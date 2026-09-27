@@ -95,7 +95,7 @@ export class TimerStopwatchController implements vscode.Disposable {
             },
             reportPreferenceError: (error) =>
               errorReporter.reportCompletionPreferenceError(error),
-          });
+          }, signal);
         },
       },
       events: {
