@@ -35,5 +35,5 @@ await runTests({
   extensionDevelopmentPath: repositoryRoot,
   extensionTestsPath,
   launchArgs: ['--disable-extensions'],
-  version: '1.125.0',
+  version: '1.138.0',
 });

@@ -8,6 +8,8 @@ updates:
       development-dependencies:
         dependency-type: "development"
     ignore:
+      # Update API types together with engines.vscode and the integration baseline.
+      - dependency-name: "@types/vscode"
       # Match the Node major embedded in the minimum supported VS Code release.
       - dependency-name: "@types/node"
         update-types:

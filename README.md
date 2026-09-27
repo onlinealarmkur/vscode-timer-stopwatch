@@ -100,7 +100,7 @@ VS Code must be open for the extension to notify you immediately. If a countdown
 
 ## Compatibility
 
-- The extension requires Visual Studio Code 1.125 or newer on desktop.
+- The extension requires Visual Studio Code 1.138 or newer on desktop.
 - On macOS, sound uses the system `afplay` player.
 - On Windows, sound uses Windows PowerShell and `System.Media.SoundPlayer`.
 - On Linux, sound requires `/usr/bin/paplay`, `/usr/bin/aplay`, or `/usr/bin/ffplay` and a working audio output.
