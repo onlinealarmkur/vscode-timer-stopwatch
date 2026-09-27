@@ -444,7 +444,11 @@ describe('completion sound', () => {
       ),
       (error: unknown) => {
         assert.ok(error instanceof AggregateError);
-        assert.match(error.message, /node timed out after 0\.025 seconds\./u);
+        const executableName = path.basename(process.execPath).replace(/\.exe$/iu, '');
+        assert.equal(
+          error.message,
+          `Completion sound playback failed. Tried: ${executableName}. ${executableName} timed out after 0.025 seconds.`,
+        );
         assert.equal(error.errors.length, 1);
         return true;
       },
